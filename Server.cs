@@ -2,10 +2,10 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.IO.Compression;
 
 namespace FileShare
 {
@@ -114,12 +114,26 @@ namespace FileShare
 
                             if (File.Exists(errorFilePath))
                             {
-                                string errorContent = File.ReadAllText(errorFilePath);
-                                writer.WriteLine("HTTP/1.1 404 Not Found");
-                                writer.WriteLine("Content-Type: text/html");
-                                writer.WriteLine($"Content-Length: {errorContent.Length}");
-                                writer.WriteLine();
-                                writer.WriteLine(errorContent);
+                                byte[] errorContentBytes = File.ReadAllBytes(errorFilePath);
+
+                                using (MemoryStream compressedStream = new MemoryStream())
+                                {
+                                    using (GZipStream gzipStream = new GZipStream(compressedStream, CompressionMode.Compress, true))
+                                    {
+                                        gzipStream.Write(errorContentBytes, 0, errorContentBytes.Length);
+                                    }
+
+                                    byte[] compressedBytes = compressedStream.ToArray();
+
+                                    writer.WriteLine("HTTP/1.1 302 Found");
+                                    writer.WriteLine("Location: /404.html");
+                                    writer.WriteLine("Content-Type: text/html");
+                                    writer.WriteLine("Content-Encoding: gzip");
+                                    writer.WriteLine("Content-Length: " + compressedBytes.Length);
+                                    writer.WriteLine();
+
+                                    stream.Write(compressedBytes, 0, compressedBytes.Length);
+                                }
                             }
                             else
                             {
