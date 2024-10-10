@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse - FileShare</title>
+    <link rel="stylesheet" href="/css/register.css">
+</head>
+
+<body>
+    <div class="register-container">
+        <a href="index.html" class="index-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+        </a>
+        <div class="logo">
+            <h1>FileShare</h1>
+        </div>
+        <form action="#" method="post">
+            <div class="form-group">
+                <label for="name">Nombre completo</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Confirmar contraseña</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+            </div>
+            <button type="submit" class="submit-btn">Crear cuenta</button>
+        </form>
+        <div class="links">
+            <a href="login.html">¿Ya tienes una cuenta? Inicia sesión</a>
+        </div>
+        <div class="terms">
+            Al crear una cuenta, aceptas nuestros <strong>Términos de servicio</strong> y <strong>Política de
+                privacidad</strong>.
+        </div>
+    </div>
+</body>
+
+</html>
