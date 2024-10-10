@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.IO.Compression;
 
 namespace FileShare
 {
@@ -89,11 +90,23 @@ namespace FileShare
                             string contentType = GetContentType(fileExtension);
                             byte[] fileBytes = File.ReadAllBytes(filePath);
 
-                            writer.WriteLine("HTTP/1.1 200 OK");
-                            writer.WriteLine($"Content-Type: {contentType}");
-                            writer.WriteLine("Content-Length: " + fileBytes.Length);
-                            writer.WriteLine();
-                            stream.Write(fileBytes, 0, fileBytes.Length);
+                            using (MemoryStream compressedStream = new MemoryStream())
+                            {
+                                using (GZipStream gzipStream = new GZipStream(compressedStream, CompressionMode.Compress, true))
+                                {
+                                    gzipStream.Write(fileBytes, 0, fileBytes.Length);
+                                }
+
+                                byte[] compressedBytes = compressedStream.ToArray();
+
+                                writer.WriteLine("HTTP/1.1 200 OK");
+                                writer.WriteLine($"Content-Type: {contentType}");
+                                writer.WriteLine("Content-Encoding: gzip");
+                                writer.WriteLine("Content-Length: " + compressedBytes.Length);
+                                writer.WriteLine();
+
+                                stream.Write(compressedBytes, 0, compressedBytes.Length);
+                            }
                         }
                         else
                         {
