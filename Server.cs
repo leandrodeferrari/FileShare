@@ -21,7 +21,7 @@ namespace FileShare
 
             string fileServingPath = config["ServerConfig"]["FileServingPath"].ToString();
             int port = (int)config["ServerConfig"]["Port"];
-            TcpListener server = new TcpListener(IPAddress.Any, port);
+            TcpListener server = new TcpListener(IPAddress.Loopback, port);
 
             server.Start();
 
