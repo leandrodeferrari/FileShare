@@ -24,7 +24,6 @@ namespace FileShare
 
             Console.WriteLine($"Servidor de FileShare iniciado en el puerto {port}. Esperando conexiones... {Environment.NewLine}");
 
-
             while (true)
             {
                 TcpClient client = server.AcceptTcpClient();
@@ -236,15 +235,15 @@ namespace FileShare
 
         static string HandlePostRequest(StreamReader reader, StreamWriter writer)
         {
-            string contentLengthLine;
+            string headerLine;
             int contentLength = 0;
             string body = "";
 
-            while (!string.IsNullOrEmpty(contentLengthLine = reader.ReadLine()))
+            while (!string.IsNullOrEmpty(headerLine = reader.ReadLine()))
             {
-                if (contentLengthLine.StartsWith("Content-Length:", StringComparison.OrdinalIgnoreCase))
+                if (headerLine.StartsWith("Content-Length:", StringComparison.OrdinalIgnoreCase))
                 {
-                    contentLength = int.Parse(contentLengthLine.Split(':')[1].Trim());
+                    contentLength = int.Parse(headerLine.Split(':')[1].Trim());
                 }
             }
 
